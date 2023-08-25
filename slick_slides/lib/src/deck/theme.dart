@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class SlideTheme extends InheritedWidget {
@@ -106,7 +108,10 @@ class SlideTextThemeData {
       fontFamily: 'Inter',
       color: Colors.white,
       fontSize: 90.0,
-      fontWeight: FontWeight.w900,
+      fontWeight: FontWeight.w800,
+      fontVariations: [
+        FontVariation('wght', 800),
+      ],
       height: 1.1,
     ),
     this.titleGradient = const LinearGradient(
@@ -122,6 +127,9 @@ class SlideTextThemeData {
       color: Colors.white,
       fontSize: 55.0,
       fontWeight: FontWeight.w600,
+      fontVariations: [
+        FontVariation('wght', 600),
+      ],
       height: 1.1,
     ),
     this.subtitleGradient,
@@ -130,12 +138,18 @@ class SlideTextThemeData {
       color: Colors.white,
       fontSize: 45.0,
       fontWeight: FontWeight.w400,
+      fontVariations: [
+        FontVariation('wght', 400),
+      ],
     ),
     this.code = const TextStyle(
       fontFamily: 'JetBrains Mono',
       color: Color(0xffabdafc),
-      fontWeight: FontWeight.normal,
       fontSize: 32.0,
+      fontWeight: FontWeight.w400,
+      fontVariations: [
+        FontVariation('wght', 400),
+      ],
     ),
   });
 
@@ -144,7 +158,10 @@ class SlideTextThemeData {
       fontFamily: 'Inter',
       color: Colors.white,
       fontSize: 90.0,
-      fontWeight: FontWeight.w900,
+      fontWeight: FontWeight.w800,
+      fontVariations: [
+        FontVariation('wght', 800),
+      ],
       height: 1.1,
     ),
     this.titleGradient = const LinearGradient(
@@ -160,6 +177,9 @@ class SlideTextThemeData {
       color: Color(0xff666666),
       fontSize: 55.0,
       fontWeight: FontWeight.w600,
+      fontVariations: [
+        FontVariation('wght', 600),
+      ],
       height: 1.1,
     ),
     this.subtitleGradient,
@@ -168,12 +188,18 @@ class SlideTextThemeData {
       color: Colors.black,
       fontSize: 45.0,
       fontWeight: FontWeight.w400,
+      fontVariations: [
+        FontVariation('wght', 400),
+      ],
     ),
     this.code = const TextStyle(
       fontFamily: 'JetBrains Mono',
       color: Colors.black,
-      fontWeight: FontWeight.normal,
       fontSize: 32.0,
+      fontWeight: FontWeight.w400,
+      fontVariations: [
+        FontVariation('wght', 400),
+      ],
     ),
   });
 
