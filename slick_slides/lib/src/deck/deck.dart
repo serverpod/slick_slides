@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_meedu_videoplayer/meedu_player.dart';
 import 'package:slick_slides/slick_slides.dart';
 import 'package:slick_slides/src/deck/deck_controls.dart';
 import 'package:slick_slides/src/deck/slide_config.dart';
@@ -13,8 +12,6 @@ class SlickSlides {
 
   Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
-
-    initMeeduPlayer();
 
     await Highlighter.initialize(['dart', 'yaml']);
     var theme = await HighlighterTheme.loadDarkTheme();

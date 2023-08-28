@@ -13,8 +13,7 @@ dependencies:
     sdk: flutter
   auto_size_text: ^3.0.0
   diff_match_patch: ^0.4.1
-  flutter_meedu_videoplayer: ^4.2.13
-  syntax_highlight: ^0.1.0
+  syntax_highlight: ^0.2.0
 
 dev_dependencies:
   flutter_test:

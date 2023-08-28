@@ -3,7 +3,6 @@ library slick_slides;
 export 'src/slides/content.dart';
 export 'src/slides/title.dart';
 export 'src/slides/person.dart';
-export 'src/slides/video.dart';
 export 'src/transitions/fade.dart';
 export 'src/transitions/transition.dart';
 export 'src/widgets/bullets.dart';
