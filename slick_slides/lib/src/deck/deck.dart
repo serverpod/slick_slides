@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:slick_slides/slick_slides.dart';
 import 'package:slick_slides/src/deck/deck_controls.dart';
@@ -93,6 +94,17 @@ class SlideDeckState extends State<SlideDeck> {
   void dispose() {
     super.dispose();
     _focusNode.dispose();
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+
+    SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
+      _navigatorKey.currentState?.pushReplacement(
+        _generateRoute(RouteSettings(name: '$_index')),
+      );
+    });
   }
 
   void _onChangeSlide(int delta) {
