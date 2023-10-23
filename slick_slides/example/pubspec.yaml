@@ -12,6 +12,8 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  made_with_serverpod: ^1.1.0
+  
   slick_slides:
     path: ../
 

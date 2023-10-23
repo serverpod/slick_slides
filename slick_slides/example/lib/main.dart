@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:made_with_serverpod/made_with_serverpod.dart';
 import 'package:slick_slides/slick_slides.dart';
 
 void main() async {
@@ -96,6 +97,26 @@ class MyHomePage extends StatelessWidget {
                 ],
               ),
             );
+          },
+        ),
+        Slide(
+          transition: const SlickFadeTransition(),
+          builder: (context) {
+            return const ContentSlide(
+              content: Center(
+                child: SizedBox(
+                  width: 600,
+                  child: AnimatedServerpodLogo(
+                    brightness: Brightness.dark,
+                    animate: true,
+                    loop: false,
+                  ),
+                ),
+              ),
+            );
+          },
+          onPrecache: (context) async {
+            AnimatedServerpodLogo.precache();
           },
         ),
         Slide(
