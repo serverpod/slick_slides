@@ -76,9 +76,10 @@ class MyHomePage extends StatelessWidget {
             );
           },
         ),
-        Slide(
+        Slide.withSubSlides(
           transition: _defaultTransition,
-          builder: (context) {
+          subSlideCount: 4 + 1,
+          builder: (context, index) {
             return ContentSlide(
               title: const Text('What is Slick Slides?'),
               content: Bullets(
@@ -95,6 +96,7 @@ class MyHomePage extends StatelessWidget {
                       'already, it\'s a great way to build your backend in '
                       'Dart.',
                 ],
+                numVisibleBullets: index,
               ),
             );
           },

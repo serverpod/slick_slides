@@ -8,6 +8,7 @@ const _defaultBulletSpacing = 0.8;
 class Bullets extends StatelessWidget {
   factory Bullets({
     required List<String> bullets,
+    int? numVisibleBullets,
     double bulletSpacing = _defaultBulletSpacing,
     EdgeInsets? padding,
     Key? key,
@@ -15,6 +16,7 @@ class Bullets extends StatelessWidget {
     var richBullets = bullets.map((e) => TextSpan(text: e)).toList();
     return Bullets.rich(
       bullets: richBullets,
+      numVisibleBullets: numVisibleBullets,
       bulletSpacing: bulletSpacing,
       padding: const EdgeInsets.symmetric(vertical: 50),
       key: key,
@@ -23,12 +25,14 @@ class Bullets extends StatelessWidget {
 
   const Bullets.rich({
     required this.bullets,
+    this.numVisibleBullets,
     this.bulletSpacing = _defaultBulletSpacing,
     this.padding = const EdgeInsets.symmetric(vertical: 50),
     super.key,
   });
 
   final List<TextSpan> bullets;
+  final int? numVisibleBullets;
   final double bulletSpacing;
   final EdgeInsets padding;
 
@@ -38,7 +42,14 @@ class Bullets extends StatelessWidget {
 
     var joinedBulletsList = <TextSpan>[];
     for (var i = 0; i < bullets.length; i++) {
-      joinedBulletsList.add(bullets[i]);
+      if (numVisibleBullets != null && i >= numVisibleBullets!) {
+        joinedBulletsList.add(TextSpan(
+          style: const TextStyle(color: Colors.transparent),
+          children: [bullets[i]],
+        ));
+      } else {
+        joinedBulletsList.add(bullets[i]);
+      }
 
       // Add a new line between bullets.
       if (i != bullets.length - 1) {
