@@ -68,43 +68,39 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlideDeck(
       slides: [
-        Slide(
-          builder: (context) {
-            return const TitleSlide(
-              title: Text('Slick Slides'),
-              subtitle: Text('Stunning presentations in Flutter'),
-            );
-          },
+        TitleSlide(
+          title: 'Slick Slides',
+          subtitle: 'Stunning presentations in Flutter',
         ),
-        Slide.withSubSlides(
+        BulletsSlide(
+          title: 'What is Slick Slides?',
+          bulletByBullet: true,
+          bullets: const [
+            'Slick Slides was born out of the need to make nice looking '
+                'slides for Serverpod at the FlutterCon conference.',
+            'It comes with many built-in slide types, and is easy to '
+                'extend with your own.',
+            'Browse through the slides in this presentation to see '
+                'what it can do.',
+            'If you use Slick Slides for your presentation, please '
+                'give some credit to Serverpod for the work we put into '
+                'this package. Also, check out Serverpod if you haven\'t '
+                'already, it\'s a great way to build your backend in '
+                'Dart.',
+          ],
           transition: _defaultTransition,
-          subSlideCount: 4 + 1,
-          builder: (context, index) {
-            return ContentSlide(
-              title: const Text('What is Slick Slides?'),
-              content: Bullets(
-                bullets: const [
-                  'Slick Slides was born out of the need to make nice looking '
-                      'slides for Serverpod at the FlutterCon conference.',
-                  'It comes with many built-in slide types, and is easy to '
-                      'extend with your own.',
-                  'Browse through the slides in this presentation to see '
-                      'what it can do.',
-                  'If you use Slick Slides for your presentation, please '
-                      'give some credit to Serverpod for the work we put into '
-                      'this package. Also, check out Serverpod if you haven\'t '
-                      'already, it\'s a great way to build your backend in '
-                      'Dart.',
-                ],
-                numVisibleBullets: index,
-              ),
-            );
-          },
+        ),
+        PersonSlide(
+          title: 'Rockstar Flutter Developer',
+          name: 'Philippa Flutterista',
+          image: const AssetImage(
+            'assets/portrait.jpg',
+          ),
+          transition: _defaultTransition,
         ),
         Slide(
-          transition: const SlickFadeTransition(),
           builder: (context) {
-            return const ContentSlide(
+            return const ContentLayout(
               content: Center(
                 child: SizedBox(
                   width: 600,
@@ -117,64 +113,30 @@ class MyHomePage extends StatelessWidget {
               ),
             );
           },
+          transition: const SlickFadeTransition(),
           onPrecache: (context) async {
             AnimatedServerpodLogo.precache();
           },
         ),
-        Slide(
-          transition: _defaultTransition,
-          builder: (context) {
-            return PersonSlide(
-              name: const Text('Philippa Flutterista'),
-              title: const Text('Rockstar Flutter Developer'),
-              image: Image.asset('assets/portrait.jpg'),
-            );
-          },
-          onPrecache: (context) {
-            precacheImage(
-              const AssetImage('assets/portrait.jpg'),
-              context,
-            );
-          },
-        ),
-        Slide(
-          transition: _defaultTransition,
+        BulletsSlide(
           theme: const SlideThemeData.light(),
-          builder: (context) {
-            return ContentSlide(
-              title: const Text('Themes'),
-              content: Bullets(
-                bullets: const [
-                  'Use the built in themes or create your own.',
-                  'This is the default light theme.',
-                ],
-              ),
-            );
-          },
-        ),
-        Slide(
+          title: 'Themes',
+          bullets: const [
+            'Use the built in themes or create your own.',
+            'This is the default light theme.',
+          ],
           transition: _defaultTransition,
-          builder: (context) {
-            return const ContentSlide(
-              title: Text('Animated code'),
-              content: ColoredCode(
-                code: _codeExampleA,
-              ),
-            );
-          },
         ),
-        Slide(
-          builder: (context) {
-            return const ContentSlide(
-              title: Text('Animated code'),
-              content: ColoredCode(
-                animateFromCode: _codeExampleA,
-                code: _codeExampleB,
-                animateHighlightedLines: true,
-                highlightedLines: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-              ),
-            );
-          },
+        AnimatedCodeSlide(
+          formatttedCode: [
+            FormattedCode(
+              code: _codeExampleA,
+            ),
+            FormattedCode(
+              code: _codeExampleB,
+              highlightedLines: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+            ),
+          ],
         ),
       ],
     );

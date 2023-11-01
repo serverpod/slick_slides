@@ -37,7 +37,7 @@ class SlickSlides {
 class Slide {
   const Slide({
     required WidgetBuilder builder,
-    this.name,
+    this.notes,
     this.transition,
     this.theme,
     this.onPrecache,
@@ -49,7 +49,7 @@ class Slide {
   const Slide.withSubSlides({
     required SubSlideWidgetBuilder builder,
     required this.subSlideCount,
-    this.name,
+    this.notes,
     this.transition,
     this.theme,
     this.onPrecache,
@@ -59,7 +59,7 @@ class Slide {
 
   final WidgetBuilder? _builder;
   final SubSlideWidgetBuilder? _subSlideBuilder;
-  final String? name;
+  final String? notes;
   final SlickTransition? transition;
   final SlideThemeData? theme;
   final void Function(BuildContext context)? onPrecache;
@@ -138,6 +138,16 @@ class _SlideIndex {
   int get hashCode => index.hashCode ^ subIndex.hashCode * 5179;
 }
 
+class _SlideArguments {
+  const _SlideArguments({
+    required this.animateContents,
+    required this.animateTransition,
+  });
+
+  final bool animateContents;
+  final bool animateTransition;
+}
+
 class SlideDeckState extends State<SlideDeck> {
   _SlideIndex _index = const _SlideIndex(0, 0);
 
@@ -185,7 +195,7 @@ class SlideDeckState extends State<SlideDeck> {
     });
   }
 
-  void _onChangeSlide(_SlideIndex newIndex, bool animate) {
+  void _onChangeSlide(_SlideIndex newIndex, _SlideArguments arguments) {
     if (_index != newIndex) {
       // Precache the next and previous slides.
       _precacheSlide(newIndex.index - 1);
@@ -195,7 +205,7 @@ class SlideDeckState extends State<SlideDeck> {
         _index = newIndex;
         _navigatorKey.currentState?.pushReplacementNamed(
           '$_index',
-          arguments: animate,
+          arguments: arguments,
         );
       });
       _index = newIndex;
@@ -209,7 +219,10 @@ class SlideDeckState extends State<SlideDeck> {
 
     _onChangeSlide(
       nextIndex,
-      _index.index != nextIndex.index,
+      _SlideArguments(
+        animateContents: true,
+        animateTransition: _index.index != nextIndex.index,
+      ),
     );
   }
 
@@ -218,7 +231,10 @@ class SlideDeckState extends State<SlideDeck> {
       _index.prev(
         slides: widget.slides,
       ),
-      false,
+      const _SlideArguments(
+        animateContents: false,
+        animateTransition: false,
+      ),
     );
   }
 
@@ -327,9 +343,10 @@ class SlideDeckState extends State<SlideDeck> {
     );
     var slide = widget.slides[index.index];
     var transition = slide.transition;
-    var animate = settings.arguments as bool? ?? true;
+    var arguments = settings.arguments as _SlideArguments? ??
+        const _SlideArguments(animateContents: false, animateTransition: false);
 
-    if (transition == null || !animate) {
+    if (transition == null || !arguments.animateTransition) {
       return PageRouteBuilder(
           transitionDuration: Duration.zero,
           pageBuilder: (context, _, __) {
@@ -345,7 +362,7 @@ class SlideDeckState extends State<SlideDeck> {
 
             return SlideConfig(
               data: SlideConfigData(
-                animateIn: animate,
+                animateIn: arguments.animateContents,
               ),
               child: slideWidget,
             );

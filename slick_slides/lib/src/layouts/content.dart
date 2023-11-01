@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:slick_slides/slick_slides.dart';
 
-class ContentSlide extends StatelessWidget {
-  const ContentSlide({
+class ContentLayout extends StatelessWidget {
+  const ContentLayout({
     this.title,
     this.subtitle,
     this.content,
