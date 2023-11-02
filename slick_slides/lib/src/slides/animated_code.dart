@@ -15,15 +15,15 @@ class AnimatedCodeSlide extends Slide {
   AnimatedCodeSlide({
     String? title,
     String? subtitle,
-    required List<FormattedCode> formatttedCode,
+    required List<FormattedCode> formattedCode,
     WidgetBuilder? backgroundBuilder,
     String? notes,
     SlickTransition? transition,
     final SlideThemeData? theme,
   }) : super.withSubSlides(
           builder: (context, index) {
-            var highlightedLines = formatttedCode[index].highlightedLines;
-            var code = formatttedCode[index].code;
+            var highlightedLines = formattedCode[index].highlightedLines;
+            var code = formattedCode[index].code;
 
             Widget content;
             if (index == 0) {
@@ -33,7 +33,7 @@ class AnimatedCodeSlide extends Slide {
               );
             } else {
               content = ColoredCode(
-                animateFromCode: formatttedCode[index - 1].code,
+                animateFromCode: formattedCode[index - 1].code,
                 code: code,
                 highlightedLines: highlightedLines,
                 animateHighlightedLines: true,
@@ -47,7 +47,7 @@ class AnimatedCodeSlide extends Slide {
               content: content,
             );
           },
-          subSlideCount: formatttedCode.length,
+          subSlideCount: formattedCode.length,
           notes: notes,
           transition: transition,
           theme: theme,
