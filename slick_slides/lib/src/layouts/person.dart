@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:slick_slides/slick_slides.dart';
 
+/// The layout used by [PersonSlide].
 class PersonLayout extends StatelessWidget {
+  /// Creates a layout for a slide with a person's name, title, and image.
   const PersonLayout({
     required this.name,
     required this.title,
@@ -10,9 +12,16 @@ class PersonLayout extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  /// The name of the person.
   final Widget name;
+
+  /// The title of the person.
   final Widget title;
+
+  /// The background of the slide.
   final Widget? background;
+
+  /// The image of the person.
   final Widget image;
 
   @override

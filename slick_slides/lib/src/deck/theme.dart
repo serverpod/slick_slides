@@ -2,24 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class SlideTheme extends InheritedWidget {
-  const SlideTheme({
-    required this.data,
-    required super.child,
-    super.key,
-  });
-
-  final SlideThemeData data;
-
-  @override
-  bool updateShouldNotify(SlideTheme oldWidget) => oldWidget.data != data;
-
-  static SlideThemeData? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<SlideTheme>()?.data;
-  }
-}
-
+/// The theme used to style a [Slide]. A default theme is provided by the
+/// [SlideDeck], but can be overridden by providing a custom [SlideTheme] to a
+/// specific [Slide].
 class SlideThemeData {
+  /// Creates a default dark theme.
   const SlideThemeData.dark({
     this.brightness = Brightness.dark,
     this.borderPadding = const EdgeInsets.symmetric(
@@ -43,6 +30,7 @@ class SlideThemeData {
     WidgetBuilder? backgroundBuilder,
   }) : _backgroundBuilder = backgroundBuilder;
 
+  /// Creates a default light theme.
   const SlideThemeData.light({
     this.brightness = Brightness.light,
     this.borderPadding = const EdgeInsets.symmetric(
@@ -66,16 +54,34 @@ class SlideThemeData {
     WidgetBuilder? backgroundBuilder,
   }) : _backgroundBuilder = backgroundBuilder;
 
+  /// The brightness of the theme.
   final Brightness brightness;
+
+  /// The padding around the content of the slide.
   final EdgeInsets borderPadding;
+
+  /// The spacing between the title and the subtitle.
   final double subtitleSpacing;
+
+  /// The spacing between the title/subtitle and the content.
   final double titleSpacing;
+
+  /// The horizontal spacing between pieces of content on a slide.
   final double horizontalSpacing;
+
+  /// The border radius of an image, e.g. on a [PersonSlide].
   final BorderRadiusGeometry imageBorderRadius;
+
+  /// The box shadow of an image, e.g. on a [PersonSlide].
   final List<BoxShadow>? imageBoxShadow;
+
+  /// The text theme used to style text on a slide.
   final SlideTextThemeData textTheme;
+
   final WidgetBuilder? _backgroundBuilder;
 
+  /// The background builder used to build the background of a slide. By default
+  /// this is a gradient that depends on the brightness of the theme.
   WidgetBuilder get backgroundBuilder {
     if (brightness == Brightness.dark) {
       return _backgroundBuilder ??
@@ -102,7 +108,9 @@ class SlideThemeData {
   }
 }
 
+/// The text theme used to style text on a slide.
 class SlideTextThemeData {
+  /// Creates a default dark text theme.
   const SlideTextThemeData.dark({
     this.title = const TextStyle(
       fontFamily: 'Inter',
@@ -153,6 +161,7 @@ class SlideTextThemeData {
     ),
   });
 
+  /// Creates a default light text theme.
   const SlideTextThemeData.light({
     this.title = const TextStyle(
       fontFamily: 'Inter',
@@ -203,10 +212,47 @@ class SlideTextThemeData {
     ),
   });
 
+  /// The style of the title text.
   final TextStyle title;
+
+  /// The optional gradient used to draw the title text. If used, it will
+  /// override the color property of the [title] style.
   final Gradient? titleGradient;
+
+  /// The style of the subtitle text.
   final TextStyle subtitle;
+
+  /// The optional gradient used to draw the subtitle text. If used, it will
+  /// override the color property of the [subtitle] style.
   final Gradient? subtitleGradient;
+
+  /// The style of the body text.
   final TextStyle body;
+
+  /// The base style of the code text. Coloring is overridden by the
+  /// [ColoredCode] widget.
   final TextStyle code;
+}
+
+/// Inherited widget used to pass [SlideThemeData] down the widget tree. The
+/// configuration can be accessed using [SlideTheme.of] when building a
+/// [Slide].
+class SlideTheme extends InheritedWidget {
+  /// Creates a [SlideTheme]. This is typically done by the [SlideDeck].
+  const SlideTheme({
+    required this.data,
+    required super.child,
+    super.key,
+  });
+
+  /// The theme data for the slide.
+  final SlideThemeData data;
+
+  @override
+  bool updateShouldNotify(SlideTheme oldWidget) => oldWidget.data != data;
+
+  /// Returns the [SlideThemeData] for the given [context].
+  static SlideThemeData? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<SlideTheme>()?.data;
+  }
 }

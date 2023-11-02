@@ -6,7 +6,12 @@ import 'package:slick_slides/src/deck/slide_config.dart';
 const _dimmedCodeOpacity = 0.3;
 const _dimCodeDuration = Duration(milliseconds: 500);
 
+/// A widget that displays and optionally animates code with syntax
+/// highlighting.
 class ColoredCode extends StatefulWidget {
+  /// Creates a widget that displays and optionally animates code with syntax
+  /// highlighting. Set the [animateFromCode] property to animate between two
+  /// code snippets.
   const ColoredCode({
     required this.code,
     this.animateFromCode,
@@ -20,14 +25,32 @@ class ColoredCode extends StatefulWidget {
     super.key,
   });
 
+  /// The code to display, or the final code if [animateFromCode] is set.
   final String code;
+
+  /// The code to animate from. The final displayed code will be [code].
   final String? animateFromCode;
+
+  /// The language to use for syntax highlighting. Defaults to 'dart'.
   final String language;
+
+  /// The number of spaces to use for tabs. Defaults to 2.
   final int tabSize;
+
+  /// The text style to use for the code. Defaults to the default style of the
+  /// build context.
   final TextStyle? textStyle;
+
+  /// Maximum duration of the animation. Defaults to 2 seconds.
   final Duration maxAnimationDuration;
+
+  /// Duration of each keystroke animation. Defaults to 50 milliseconds.
   final Duration keystrokeDuration;
+
+  /// The lines to highlight at the end of the animation.
   final List<int> highlightedLines;
+
+  /// Whether to animate the highlighted lines. Defaults to false.
   final bool animateHighlightedLines;
 
   @override

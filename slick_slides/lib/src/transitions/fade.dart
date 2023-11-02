@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:slick_slides/slick_slides.dart';
 
+/// A transition that fades between slides. If [color] is specified, the
+/// transition will fade through that color.
 class SlickFadeTransition extends SlickTransition {
+  /// Creates a transition that fades between slides. If [color] is specified,
+  /// the transition will fade through that color.
   const SlickFadeTransition({
     super.duration = const Duration(milliseconds: 500),
     this.color,
   });
 
+  /// The color to fade through. If null, the transition will fade between the
+  /// two slides.
   final Color? color;
 
   @override

@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
 
+/// A slide that displays a list of bullet points.
 class BulletsSlide extends Slide {
+  /// Creates a slide that displays a list of bullet points based on [String]s.
+  /// The [bullets] can either be shown all at once or one at a time by setting
+  /// [bulletByBullet] to true.
   BulletsSlide({
     String? title,
     String? subtitle,
@@ -30,6 +34,9 @@ class BulletsSlide extends Slide {
           theme: theme,
         );
 
+  /// Creates a slide that displays a list of bullet points based on [TextSpan]s.
+  /// The [bullets] can either be shown all at once or one at a time by setting
+  /// [bulletByBullet] to true.
   BulletsSlide.rich({
     TextSpan? title,
     TextSpan? subtitle,

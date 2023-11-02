@@ -5,7 +5,13 @@ import 'package:slick_slides/slick_slides.dart';
 
 const _defaultBulletSpacing = 0.8;
 
+/// A widget that displays a list of bullets. [numVisibleBullets] can be used to
+/// control how many bullets should be displayed. The rest of the bullets will
+/// be hidden, but will still take up space.
 class Bullets extends StatelessWidget {
+  /// Creates a widget that displays a list of bullets. [numVisibleBullets] can
+  /// be used to control how many bullets should be displayed. The rest of the
+  /// bullets will be hidden, but will still take up space.
   factory Bullets({
     required List<String> bullets,
     int? numVisibleBullets,
@@ -23,6 +29,11 @@ class Bullets extends StatelessWidget {
     );
   }
 
+  /// Creates a widget that displays a list of bullets. [numVisibleBullets] can
+  /// be used to control how many bullets should be displayed. The rest of the
+  /// bullets will be hidden, but will still take up space. This constructor
+  /// uses [TextSpan]s instead of [String]s for the bullets to allow for rich
+  /// text.
   const Bullets.rich({
     required this.bullets,
     this.numVisibleBullets,
@@ -31,9 +42,17 @@ class Bullets extends StatelessWidget {
     super.key,
   });
 
+  /// The bullets to display.
   final List<TextSpan> bullets;
+
+  /// The number of bullets to display. The rest of the bullets will be hidden,
+  /// but will still take up space.
   final int? numVisibleBullets;
+
+  /// The spacing between bullets.
   final double bulletSpacing;
+
+  /// The padding around the bullets.
   final EdgeInsets padding;
 
   @override

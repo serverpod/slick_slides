@@ -2,16 +2,26 @@ import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
 
+/// Represents a code snippet with optionally highlighted lines.
 class FormattedCode {
+  /// Creates a code snippet with optionally highlighted lines.
   FormattedCode({
     required this.code,
     this.highlightedLines = const [],
   });
+
+  /// The code snippet.
   final String code;
+
+  /// The lines to highlight.
   final List<int> highlightedLines;
 }
 
+/// A slide that displays code and optionally animates between code snippets.
 class AnimatedCodeSlide extends Slide {
+  /// Creates a slide that displays code and optionally animates between code
+  /// snippets. Takes a list of [FormattedCode] objects, each of which contains
+  /// a code snippet and optionally highlighted lines.
   AnimatedCodeSlide({
     String? title,
     String? subtitle,

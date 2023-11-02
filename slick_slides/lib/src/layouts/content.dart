@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:slick_slides/slick_slides.dart';
 
+/// A basic layout for a slide. It can have a title, subtitle, and content.
 class ContentLayout extends StatelessWidget {
+  /// Creates a basic layout for a slide. It can have a title, subtitle, and
+  /// content. This layout is used by most types of slides.
   const ContentLayout({
     this.title,
     this.subtitle,
@@ -10,9 +13,16 @@ class ContentLayout extends StatelessWidget {
     super.key,
   });
 
+  /// The title of the slide.
   final Widget? title;
+
+  /// The subtitle of the slide.
   final Widget? subtitle;
+
+  /// The background of the slide.
   final Widget? background;
+
+  /// The content of the slide.
   final Widget? content;
 
   @override

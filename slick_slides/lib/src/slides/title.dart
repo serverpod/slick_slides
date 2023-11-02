@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
 
+/// A slide that displays a title and subtitle centered on the slide.
 class TitleSlide extends Slide {
+  /// Creates a slide that displays a title and subtitle centered on the slide.
   TitleSlide({
     required String title,
     String? subtitle,
@@ -23,6 +25,9 @@ class TitleSlide extends Slide {
           theme: theme,
         );
 
+  /// Creates a slide that displays a title and subtitle centered on the slide.
+  /// This constructor uses [TextSpan]s instead of [String]s for the title and
+  /// subtitle to allow for rich text.
   TitleSlide.rich({
     required TextSpan title,
     TextSpan? subtitle,

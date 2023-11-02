@@ -8,14 +8,21 @@ import 'package:slick_slides/src/deck/deck_controls.dart';
 import 'package:slick_slides/src/deck/slide_config.dart';
 import 'package:syntax_highlight/syntax_highlight.dart';
 
+/// Builds the content of a slide, when there are more than one sub-slide.
 typedef SubSlideWidgetBuilder = Widget Function(
   BuildContext context,
   int index,
 );
 
+/// A class that initializes the `slick_slides` package, by loading required
+/// resources.
 class SlickSlides {
+  /// A [Map] of all code highlighters accessible by [SlickSlides].
   static final highlighters = <String, Highlighter>{};
 
+  /// Initializes the `slick_slides` package, by loading required resources.
+  /// Typically called in the `main()` function of the application, after
+  /// `WidgetsFlutterBinding.ensureInitialized()` has been called.
   Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
 
@@ -34,7 +41,16 @@ class SlickSlides {
   }
 }
 
+/// Represents a single slide in a [SlideDeck]. A slide has a [builder] that
+/// builds the content of the slide, and an optional [notes] field that can be
+/// used to add presenter notes to the slide. By default, a slide uses the
+/// main theme of the [SlideDeck], but a [theme] can be specified to override
+/// the theme for a single slide. You can also specify a [transition] to use
+/// when transitioning to the slide.
 class Slide {
+  /// Creates a new slide with a [builder] that builds the content of the slide.
+  /// The [onPrecache] callback is called when the slide is about to be shown,
+  /// and can be used to load resources that are needed for the slide.
   const Slide({
     required WidgetBuilder builder,
     this.notes,
@@ -46,6 +62,10 @@ class Slide {
         subSlideCount = 1,
         hasSubSlides = false;
 
+  /// Creates a new slide with a [builder] that builds the content of the slide
+  /// consisting of sub slides which are built step-by-step. The [onPrecache]
+  /// callback is called when the slide is about to be shown, and can be used to
+  /// load resources that are needed for the slide.
   const Slide.withSubSlides({
     required SubSlideWidgetBuilder builder,
     required this.subSlideCount,
@@ -59,15 +79,38 @@ class Slide {
 
   final WidgetBuilder? _builder;
   final SubSlideWidgetBuilder? _subSlideBuilder;
+
+  /// The presenter notes for the slide.
   final String? notes;
+
+  /// The transition to use when transitioning to the slide.
   final SlickTransition? transition;
+
+  /// The theme to use for the slide. If not specified, the main theme of the
+  /// [SlideDeck] is used.
   final SlideThemeData? theme;
+
+  /// Called when the slide is about to be shown, and can be used to load
+  /// resources that are needed for the slide.
   final void Function(BuildContext context)? onPrecache;
+
+  /// The number of sub slides in the slide. Will always be 1 if the slide
+  /// doesn't have sub slides.
   final int subSlideCount;
+
+  /// Whether the slide has sub slides.
   final bool hasSubSlides;
 }
 
+/// A deck of slides. It takes a list of [Slide]s, and builds the content of the
+/// slides using the [Slide.builder] callback. The [SlideDeck] widget also
+/// handles navigation between the slides, and provides a default theme for the
+/// slides.
 class SlideDeck extends StatefulWidget {
+  /// Creates a new slide deck with the given [slides]. The [theme] is the
+  /// default theme for all slides, and can be overridden for individual slides
+  /// by specifying a [Slide.theme]. The [size] represents the coordinate space
+  /// of the slides, and is used to scale the slides to fit the screen.
   const SlideDeck({
     required this.slides,
     this.theme = const SlideThemeData.dark(),
@@ -75,8 +118,13 @@ class SlideDeck extends StatefulWidget {
     super.key,
   });
 
+  /// The slides in the deck.
   final List<Slide> slides;
+
+  /// The default theme for the slides.
   final SlideThemeData theme;
+
+  /// The size of the slides.
   final Size size;
 
   @override
@@ -148,6 +196,7 @@ class _SlideArguments {
   final bool animateTransition;
 }
 
+/// The state of a [SlideDeck].
 class SlideDeckState extends State<SlideDeck> {
   _SlideIndex _index = const _SlideIndex(0, 0);
 

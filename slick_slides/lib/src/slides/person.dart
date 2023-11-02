@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
 
+/// A slide that displays information about a person. It can have a name, title,
+/// and an image.
 class PersonSlide extends Slide {
+  /// Creates a slide that displays information about a person. It can have a
+  /// name, title, and an image.
   PersonSlide({
     required String title,
     required String name,
@@ -33,6 +37,9 @@ class PersonSlide extends Slide {
           theme: theme,
         );
 
+  /// Creates a slide that displays information about a person. It can have a
+  /// name, title, and an image. This constructor uses [TextSpan]s instead of
+  /// [String]s for the title and name to allow for rich text.
   PersonSlide.rich({
     required TextSpan title,
     required TextSpan name,

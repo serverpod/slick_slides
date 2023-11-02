@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// Controls for navigating between slides in a [SlideDeck]. The controls fade
+/// in and out based on the [visible] property.
 class DeckControls extends StatefulWidget {
+  /// Creates a [DeckControls].
   const DeckControls({
     required this.onPrevious,
     required this.onNext,
@@ -8,8 +11,13 @@ class DeckControls extends StatefulWidget {
     super.key,
   });
 
+  /// Called when the previous button is pressed.
   final VoidCallback onPrevious;
+
+  /// Called when the next button is pressed.
   final VoidCallback onNext;
+
+  /// Whether the controls are visible.
   final bool visible;
 
   @override

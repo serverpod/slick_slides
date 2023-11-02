@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:slick_slides/src/deck/theme.dart';
 import 'package:slick_slides/src/widgets/gradient_text.dart';
 
+/// The layout of a slide with a title and subtitle.
 class TitleLayout extends StatelessWidget {
+  /// Creates a layout of a slide with a title and subtitle.
   const TitleLayout({
     required this.title,
     this.subtitle,
@@ -10,8 +12,13 @@ class TitleLayout extends StatelessWidget {
     super.key,
   });
 
+  /// The title of the slide.
   final Widget title;
+
+  /// The subtitle of the slide.
   final Widget? subtitle;
+
+  /// The background of the slide.
   final Widget? background;
 
   @override
