@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:made_with_serverpod/made_with_serverpod.dart';
 import 'package:slick_slides/slick_slides.dart';
@@ -68,9 +70,12 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SlideDeck(
       slides: [
-        TitleSlide(
+        FullScreenImageSlide(
+          image: const AssetImage('assets/logo-background.jpg'),
           title: 'Slick Slides',
-          subtitle: 'Stunning presentations in Flutter',
+          subtitle: 'Stunning presentations\nwith Flutter',
+          alignment: const Alignment(0.6, 0.0),
+          theme: const SlideThemeData.darkAlt(),
         ),
         BulletsSlide(
           title: 'What is Slick Slides?',

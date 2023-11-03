@@ -3,23 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:slick_slides/slick_slides.dart';
 
 /// A slide that displays a title and subtitle centered on the slide.
-class TitleSlide extends Slide {
+class FullScreenImageSlide extends Slide {
   /// Creates a slide that displays a title and subtitle centered on the slide.
-  TitleSlide({
-    required String title,
+  FullScreenImageSlide({
+    required ImageProvider image,
+    String? title,
     String? subtitle,
     Alignment alignment = Alignment.center,
-    WidgetBuilder? backgroundBuilder,
     String? notes,
     SlickTransition? transition,
     final SlideThemeData? theme,
   }) : super(
           builder: (context) {
             return TitleLayout(
-              title: Text(title),
+              title: title == null ? null : Text(title),
               subtitle: subtitle == null ? null : Text(subtitle),
               alignment: alignment,
-              background: backgroundBuilder?.call(context),
+              background: Image(
+                image: image,
+                fit: BoxFit.cover,
+              ),
+            );
+          },
+          onPrecache: (context) {
+            precacheImage(
+              image,
+              context,
             );
           },
           notes: notes,
@@ -30,7 +39,7 @@ class TitleSlide extends Slide {
   /// Creates a slide that displays a title and subtitle centered on the slide.
   /// This constructor uses [TextSpan]s instead of [String]s for the title and
   /// subtitle to allow for rich text.
-  TitleSlide.rich({
+  FullScreenImageSlide.rich({
     required TextSpan title,
     TextSpan? subtitle,
     Alignment alignment = Alignment.center,

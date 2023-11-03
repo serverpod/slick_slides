@@ -6,20 +6,25 @@ import 'package:slick_slides/src/widgets/gradient_text.dart';
 class TitleLayout extends StatelessWidget {
   /// Creates a layout of a slide with a title and subtitle.
   const TitleLayout({
-    required this.title,
+    this.title,
     this.subtitle,
+    this.alignment = Alignment.center,
     this.background,
     super.key,
   });
 
   /// The title of the slide.
-  final Widget title;
+  final Widget? title;
 
   /// The subtitle of the slide.
   final Widget? subtitle;
 
   /// The background of the slide.
   final Widget? background;
+
+  /// The alignment of the title and subtitle. Defaults to [Alignment.center]
+  /// which centers the title and subtitle on the slide.
+  final Alignment alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -30,18 +35,20 @@ class TitleLayout extends StatelessWidget {
         background ?? theme.backgroundBuilder(context),
         Padding(
           padding: theme.borderPadding,
-          child: Center(
+          child: Align(
+            alignment: alignment,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                DefaultTextStyle(
-                  style: theme.textTheme.title,
-                  textAlign: TextAlign.center,
-                  child: GradientText(
-                    gradient: theme.textTheme.titleGradient,
-                    child: title,
+                if (title != null)
+                  DefaultTextStyle(
+                    style: theme.textTheme.title,
+                    textAlign: TextAlign.center,
+                    child: GradientText(
+                      gradient: theme.textTheme.titleGradient,
+                      child: title!,
+                    ),
                   ),
-                ),
                 if (subtitle != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0),

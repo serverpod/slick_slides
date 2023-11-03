@@ -7,6 +7,7 @@ export 'src/transitions/fade.dart';
 export 'src/transitions/transition.dart';
 export 'src/slides/animated_code.dart';
 export 'src/slides/bullets.dart';
+export 'src/slides/full_screen_image.dart';
 export 'src/slides/person.dart';
 export 'src/slides/title.dart';
 export 'src/widgets/bullets.dart';

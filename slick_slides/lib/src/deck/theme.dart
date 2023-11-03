@@ -54,6 +54,43 @@ class SlideThemeData {
     WidgetBuilder? backgroundBuilder,
   }) : _backgroundBuilder = backgroundBuilder;
 
+  /// Creates an alternate dark theme, without the title gradient. This is
+  /// useful for slides that have a background image.
+  const SlideThemeData.darkAlt({
+    this.brightness = Brightness.dark,
+    this.borderPadding = const EdgeInsets.symmetric(
+      horizontal: 100.0,
+      vertical: 60.0,
+    ),
+    this.titleSpacing = 40.0,
+    this.subtitleSpacing = 0.0,
+    this.horizontalSpacing = 80.0,
+    this.imageBorderRadius = const BorderRadius.all(
+      Radius.circular(100),
+    ),
+    this.imageBoxShadow = const [
+      BoxShadow(
+        color: Colors.black38,
+        blurRadius: 40.0,
+        offset: Offset(0.0, 30.0),
+      ),
+    ],
+    this.textTheme = const SlideTextThemeData.dark(
+      titleGradient: null,
+      subtitle: TextStyle(
+        fontFamily: 'Inter',
+        color: Colors.white70,
+        fontSize: 55.0,
+        fontWeight: FontWeight.w600,
+        fontVariations: [
+          FontVariation('wght', 600),
+        ],
+        height: 1.1,
+      ),
+    ),
+    WidgetBuilder? backgroundBuilder,
+  }) : _backgroundBuilder = backgroundBuilder;
+
   /// The brightness of the theme.
   final Brightness brightness;
 
