@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:slick_slides/slick_slides.dart';
 import 'package:slick_slides/src/deck/slide_config.dart';
+import 'package:slick_slides/src/extensions/text_span.dart';
 
 const _defaultBulletSpacing = 0.8;
 
@@ -95,27 +96,13 @@ class _BulletsState extends State<Bullets> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     var theme = SlideTheme.of(context)!;
     var config = SlideConfig.of(context)!;
+    var defaultTextColor = theme.textTheme.body.color!;
 
     var animate = config.animateIn && _controller != null;
 
     var joinedBulletsList = <TextSpan>[];
     for (var i = 0; i < widget.bullets.length; i++) {
-      if (!animate) {
-        // Do not animate last bullet.
-        if (widget.numVisibleBullets != null &&
-            i >= widget.numVisibleBullets!) {
-          // Draw bullets with transparent color if they are not visible.
-          joinedBulletsList.add(
-            TextSpan(
-              style: const TextStyle(color: Colors.transparent),
-              children: [widget.bullets[i]],
-            ),
-          );
-        } else {
-          // Draw bullets with normal color if they are visible.
-          joinedBulletsList.add(widget.bullets[i]);
-        }
-      } else {
+      if (animate) {
         // Animating last bullet.
         if (widget.numVisibleBullets != null &&
             i >= widget.numVisibleBullets!) {
@@ -123,18 +110,36 @@ class _BulletsState extends State<Bullets> with SingleTickerProviderStateMixin {
           joinedBulletsList.add(
             TextSpan(
               style: const TextStyle(color: Colors.transparent),
-              children: [widget.bullets[i]],
+              children: [widget.bullets[i].copyWithOpacity(0)],
             ),
           );
         } else if (widget.numVisibleBullets != null &&
             i == widget.numVisibleBullets! - 1) {
-          var opacity = _controller!.value;
           // Fade in the last bullet.
+          var opacity = _controller!.value;
+
           joinedBulletsList.add(
             TextSpan(
               style: TextStyle(
-                color: Colors.white.withOpacity(opacity),
+                color: defaultTextColor.withOpacity(opacity),
               ),
+              children: [
+                widget.bullets[i].copyWithOpacity(opacity),
+              ],
+            ),
+          );
+        } else {
+          // Draw bullets with normal color if they are visible.
+          joinedBulletsList.add(widget.bullets[i]);
+        }
+      } else {
+        // Do not animate last bullet.
+        if (widget.numVisibleBullets != null &&
+            i >= widget.numVisibleBullets!) {
+          // Draw bullets with transparent color if they are not visible.
+          joinedBulletsList.add(
+            TextSpan(
+              style: const TextStyle(color: Colors.transparent),
               children: [widget.bullets[i]],
             ),
           );
