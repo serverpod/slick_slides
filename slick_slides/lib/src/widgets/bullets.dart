@@ -2,13 +2,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:slick_slides/slick_slides.dart';
+import 'package:slick_slides/src/deck/slide_config.dart';
 
 const _defaultBulletSpacing = 0.8;
 
 /// A widget that displays a list of bullets. [numVisibleBullets] can be used to
 /// control how many bullets should be displayed. The rest of the bullets will
 /// be hidden, but will still take up space.
-class Bullets extends StatelessWidget {
+class Bullets extends StatefulWidget {
   /// Creates a widget that displays a list of bullets. [numVisibleBullets] can
   /// be used to control how many bullets should be displayed. The rest of the
   /// bullets will be hidden, but will still take up space.
@@ -17,6 +18,7 @@ class Bullets extends StatelessWidget {
     int? numVisibleBullets,
     double bulletSpacing = _defaultBulletSpacing,
     EdgeInsets? padding,
+    bool animateLastVisibleBullet = false,
     Key? key,
   }) {
     var richBullets = bullets.map((e) => TextSpan(text: e)).toList();
@@ -25,6 +27,7 @@ class Bullets extends StatelessWidget {
       numVisibleBullets: numVisibleBullets,
       bulletSpacing: bulletSpacing,
       padding: const EdgeInsets.symmetric(vertical: 50),
+      animateLastVisibleBullet: animateLastVisibleBullet,
       key: key,
     );
   }
@@ -39,6 +42,7 @@ class Bullets extends StatelessWidget {
     this.numVisibleBullets,
     this.bulletSpacing = _defaultBulletSpacing,
     this.padding = const EdgeInsets.symmetric(vertical: 50),
+    this.animateLastVisibleBullet = false,
     super.key,
   });
 
@@ -55,23 +59,93 @@ class Bullets extends StatelessWidget {
   /// The padding around the bullets.
   final EdgeInsets padding;
 
+  /// If true, fade in the last bullet.
+  final bool animateLastVisibleBullet;
+
+  @override
+  State<Bullets> createState() => _BulletsState();
+}
+
+class _BulletsState extends State<Bullets> with SingleTickerProviderStateMixin {
+  AnimationController? _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.animateLastVisibleBullet) {
+      _controller = AnimationController(
+        vsync: this,
+        duration: const Duration(milliseconds: 500),
+      );
+      _controller!.addListener(() {
+        setState(() {});
+      });
+      _controller!.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var theme = SlideTheme.of(context)!;
+    var config = SlideConfig.of(context)!;
+
+    var animate = config.animateIn && _controller != null;
 
     var joinedBulletsList = <TextSpan>[];
-    for (var i = 0; i < bullets.length; i++) {
-      if (numVisibleBullets != null && i >= numVisibleBullets!) {
-        joinedBulletsList.add(TextSpan(
-          style: const TextStyle(color: Colors.transparent),
-          children: [bullets[i]],
-        ));
+    for (var i = 0; i < widget.bullets.length; i++) {
+      if (!animate) {
+        // Do not animate last bullet.
+        if (widget.numVisibleBullets != null &&
+            i >= widget.numVisibleBullets!) {
+          // Draw bullets with transparent color if they are not visible.
+          joinedBulletsList.add(
+            TextSpan(
+              style: const TextStyle(color: Colors.transparent),
+              children: [widget.bullets[i]],
+            ),
+          );
+        } else {
+          // Draw bullets with normal color if they are visible.
+          joinedBulletsList.add(widget.bullets[i]);
+        }
       } else {
-        joinedBulletsList.add(bullets[i]);
+        // Animating last bullet.
+        if (widget.numVisibleBullets != null &&
+            i >= widget.numVisibleBullets!) {
+          // Draw bullets with transparent color if they are not visible.
+          joinedBulletsList.add(
+            TextSpan(
+              style: const TextStyle(color: Colors.transparent),
+              children: [widget.bullets[i]],
+            ),
+          );
+        } else if (widget.numVisibleBullets != null &&
+            i == widget.numVisibleBullets! - 1) {
+          var opacity = _controller!.value;
+          // Fade in the last bullet.
+          joinedBulletsList.add(
+            TextSpan(
+              style: TextStyle(
+                color: Colors.white.withOpacity(opacity),
+              ),
+              children: [widget.bullets[i]],
+            ),
+          );
+        } else {
+          // Draw bullets with normal color if they are visible.
+          joinedBulletsList.add(widget.bullets[i]);
+        }
       }
 
       // Add a new line between bullets.
-      if (i != bullets.length - 1) {
+      if (i != widget.bullets.length - 1) {
         joinedBulletsList.addAll([
           const TextSpan(
             text: '\n',
@@ -79,7 +153,7 @@ class Bullets extends StatelessWidget {
           TextSpan(
             text: '\n',
             style: TextStyle(
-              height: bulletSpacing,
+              height: widget.bulletSpacing,
             ),
           ),
         ]);
@@ -91,7 +165,7 @@ class Bullets extends StatelessWidget {
     );
 
     return Padding(
-      padding: padding,
+      padding: widget.padding,
       child: DefaultTextStyle(
         style: theme.textTheme.body,
         child: AutoSizeText.rich(joinedBullets),

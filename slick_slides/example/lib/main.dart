@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:made_with_serverpod/made_with_serverpod.dart';
 import 'package:slick_slides/slick_slides.dart';

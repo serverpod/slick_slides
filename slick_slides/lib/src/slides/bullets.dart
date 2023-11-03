@@ -33,30 +33,32 @@ class BulletsSlide extends Slide {
             if (image == null) {
               content = Bullets(
                 bullets: bullets,
+                animateLastVisibleBullet: bulletByBullet,
                 numVisibleBullets: bulletByBullet ? index : null,
               );
             } else {
               content = Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (imageLocation == BulletsImageLocation.right)
+                  if (imageLocation == BulletsImageLocation.left)
                     Expanded(
-                      child: Bullets(
-                        bullets: bullets,
-                        numVisibleBullets: bulletByBullet ? index : null,
+                      child: Image(
+                        image: image,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   Expanded(
-                    child: Image(
-                      image: image,
-                      fit: BoxFit.contain,
+                    child: Bullets(
+                      bullets: bullets,
+                      numVisibleBullets: bulletByBullet ? index : null,
+                      animateLastVisibleBullet: bulletByBullet,
                     ),
                   ),
-                  if (imageLocation == BulletsImageLocation.left)
+                  if (imageLocation == BulletsImageLocation.right)
                     Expanded(
-                      child: Bullets(
-                        bullets: bullets,
-                        numVisibleBullets: bulletByBullet ? index : null,
+                      child: Image(
+                        image: image,
+                        fit: BoxFit.contain,
                       ),
                     ),
                 ],
@@ -96,30 +98,32 @@ class BulletsSlide extends Slide {
             if (image == null) {
               content = Bullets.rich(
                 bullets: bullets,
+                animateLastVisibleBullet: bulletByBullet,
                 numVisibleBullets: bulletByBullet ? index : null,
               );
             } else {
               content = Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (imageLocation == BulletsImageLocation.right)
+                  if (imageLocation == BulletsImageLocation.left)
                     Expanded(
-                      child: Bullets.rich(
-                        bullets: bullets,
-                        numVisibleBullets: bulletByBullet ? index : null,
+                      child: Image(
+                        image: image,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   Expanded(
-                    child: Image(
-                      image: image,
-                      fit: BoxFit.contain,
+                    child: Bullets.rich(
+                      bullets: bullets,
+                      numVisibleBullets: bulletByBullet ? index : null,
+                      animateLastVisibleBullet: bulletByBullet,
                     ),
                   ),
-                  if (imageLocation == BulletsImageLocation.left)
+                  if (imageLocation == BulletsImageLocation.right)
                     Expanded(
-                      child: Bullets.rich(
-                        bullets: bullets,
-                        numVisibleBullets: bulletByBullet ? index : null,
+                      child: Image(
+                        image: image,
+                        fit: BoxFit.contain,
                       ),
                     ),
                 ],

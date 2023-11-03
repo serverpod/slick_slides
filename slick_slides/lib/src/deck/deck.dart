@@ -487,7 +487,12 @@ class SlideDeckState extends State<SlideDeck> {
             child: slideWidget,
           );
         }
-        return slideWidget;
+        return SlideConfig(
+          data: SlideConfigData(
+            animateIn: arguments.animateContents,
+          ),
+          child: slideWidget,
+        );
       });
     }
   }
