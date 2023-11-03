@@ -4,8 +4,8 @@ import 'package:slick_slides/slick_slides.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await SlickSlides().initialize();
+
   runApp(const MyApp());
 }
 
