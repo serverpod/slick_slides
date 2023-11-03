@@ -188,7 +188,7 @@ class SlideTextThemeData {
       ],
     ),
     this.code = const TextStyle(
-      fontFamily: 'JetBrains Mono',
+      fontFamily: 'JetBrainsMono',
       color: Color(0xffabdafc),
       fontSize: 32.0,
       fontWeight: FontWeight.w400,
@@ -239,7 +239,7 @@ class SlideTextThemeData {
       ],
     ),
     this.code = const TextStyle(
-      fontFamily: 'JetBrains Mono',
+      fontFamily: 'JetBrainsMono',
       color: Colors.black,
       fontSize: 32.0,
       fontWeight: FontWeight.w400,
