@@ -76,6 +76,7 @@ class MyHomePage extends StatelessWidget {
           subtitle: 'Stunning presentations\nwith Flutter',
           alignment: const Alignment(0.6, 0.0),
           theme: const SlideThemeData.darkAlt(),
+          transition: _defaultTransition,
         ),
         BulletsSlide(
           title: 'What is Slick Slides?',

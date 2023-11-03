@@ -57,6 +57,7 @@ class Slide {
     this.transition,
     this.theme,
     this.onPrecache,
+    this.autoplayDuration,
   })  : _builder = builder,
         _subSlideBuilder = null,
         subSlideCount = 1,
@@ -73,6 +74,7 @@ class Slide {
     this.transition,
     this.theme,
     this.onPrecache,
+    this.autoplayDuration,
   })  : _subSlideBuilder = builder,
         _builder = null,
         hasSubSlides = true;
@@ -100,6 +102,11 @@ class Slide {
 
   /// Whether the slide has sub slides.
   final bool hasSubSlides;
+
+  /// The duration to wait before automatically advancing to the next slide.
+  /// If null, the [SlideDeck] will fallback to use the
+  /// [SlideDeck.autoplayDuration].
+  final Duration? autoplayDuration;
 }
 
 /// A deck of slides. It takes a list of [Slide]s, and builds the content of the
@@ -115,6 +122,8 @@ class SlideDeck extends StatefulWidget {
     required this.slides,
     this.theme = const SlideThemeData.dark(),
     this.size = const Size(1920, 1080),
+    this.autoplay = false,
+    this.autoplayDuration = const Duration(seconds: 5),
     super.key,
   });
 
@@ -126,6 +135,12 @@ class SlideDeck extends StatefulWidget {
 
   /// The size of the slides.
   final Size size;
+
+  /// Whether the slides should automatically advance to the next slide.
+  final bool autoplay;
+
+  /// The duration to wait before automatically advancing to the next slide.
+  final Duration autoplayDuration;
 
   @override
   State<SlideDeck> createState() => SlideDeckState();
@@ -147,6 +162,7 @@ class _SlideIndex {
 
   _SlideIndex next({
     required List<Slide> slides,
+    bool loop = false,
   }) {
     var subSlideCount = slides[index].subSlideCount;
 
@@ -154,6 +170,8 @@ class _SlideIndex {
       return _SlideIndex(index, subIndex + 1);
     } else if (index + 1 < slides.length) {
       return _SlideIndex(index + 1, 0);
+    } else if (loop) {
+      return const _SlideIndex.first();
     } else {
       return this;
     }
@@ -204,6 +222,7 @@ class SlideDeckState extends State<SlideDeck> {
 
   final _focusNode = FocusNode();
   Timer? _controlsTimer;
+  Timer? _autoplayTimer;
   bool _mouseMovedRecently = false;
   bool _mouseInsideControls = false;
 
@@ -217,6 +236,23 @@ class SlideDeckState extends State<SlideDeck> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _precacheSlide(1);
     });
+
+    if (widget.autoplay) {
+      _startAutoplay();
+    }
+  }
+
+  @override
+  void didUpdateWidget(SlideDeck oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.autoplay != oldWidget.autoplay) {
+      if (widget.autoplay) {
+        _startAutoplay();
+      } else {
+        _stopAutoplay();
+      }
+    }
   }
 
   void _precacheSlide(int index) {
@@ -227,10 +263,32 @@ class SlideDeckState extends State<SlideDeck> {
     slide.onPrecache?.call(context);
   }
 
+  Duration get _currentSubSlideDuration {
+    var currentSlide = widget.slides[_index.index];
+    var slideDuration =
+        currentSlide.autoplayDuration ?? widget.autoplayDuration;
+    var numSubSlides = currentSlide.subSlideCount;
+    return slideDuration ~/ numSubSlides;
+  }
+
+  void _startAutoplay() {
+    var duration = _currentSubSlideDuration;
+    _autoplayTimer = Timer(duration, () {
+      _onNext();
+      _startAutoplay();
+    });
+  }
+
+  void _stopAutoplay() {
+    _autoplayTimer?.cancel();
+  }
+
   @override
   void dispose() {
     super.dispose();
     _focusNode.dispose();
+    _controlsTimer?.cancel();
+    _autoplayTimer?.cancel();
   }
 
   @override
@@ -264,6 +322,7 @@ class SlideDeckState extends State<SlideDeck> {
   void _onNext() {
     var nextIndex = _index.next(
       slides: widget.slides,
+      loop: widget.autoplay,
     );
 
     _onChangeSlide(
@@ -356,27 +415,28 @@ class SlideDeckState extends State<SlideDeck> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 16.0,
-                    right: 16.0,
-                    child: MouseRegion(
-                      onEnter: (event) {
-                        setState(() {
-                          _mouseInsideControls = true;
-                        });
-                      },
-                      onExit: (event) {
-                        setState(() {
-                          _mouseInsideControls = false;
-                        });
-                      },
-                      child: DeckControls(
-                        visible: _mouseMovedRecently || _mouseInsideControls,
-                        onPrevious: _onPrevious,
-                        onNext: _onNext,
+                  if (!widget.autoplay)
+                    Positioned(
+                      bottom: 16.0,
+                      right: 16.0,
+                      child: MouseRegion(
+                        onEnter: (event) {
+                          setState(() {
+                            _mouseInsideControls = true;
+                          });
+                        },
+                        onExit: (event) {
+                          setState(() {
+                            _mouseInsideControls = false;
+                          });
+                        },
+                        child: DeckControls(
+                          visible: _mouseMovedRecently || _mouseInsideControls,
+                          onPrevious: _onPrevious,
+                          onNext: _onNext,
+                        ),
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
