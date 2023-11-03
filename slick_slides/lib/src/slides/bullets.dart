@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
 
+/// The position of an image in a [BulletsSlide].
+enum BulletsImageLocation {
+  /// The image is on the left side of the slide.
+  left,
+
+  /// The image is on the right side of the slide.
+  right,
+}
+
 /// A slide that displays a list of bullet points.
 class BulletsSlide extends Slide {
   /// Creates a slide that displays a list of bullet points based on [String]s.
@@ -12,20 +21,53 @@ class BulletsSlide extends Slide {
     String? subtitle,
     required List<String> bullets,
     bool bulletByBullet = false,
+    BulletsImageLocation imageLocation = BulletsImageLocation.right,
+    AssetImage? image,
     WidgetBuilder? backgroundBuilder,
     String? notes,
     SlickTransition? transition,
     final SlideThemeData? theme,
   }) : super.withSubSlides(
           builder: (context, index) {
+            Widget content;
+            if (image == null) {
+              content = Bullets(
+                bullets: bullets,
+                numVisibleBullets: bulletByBullet ? index : null,
+              );
+            } else {
+              content = Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (imageLocation == BulletsImageLocation.right)
+                    Expanded(
+                      child: Bullets(
+                        bullets: bullets,
+                        numVisibleBullets: bulletByBullet ? index : null,
+                      ),
+                    ),
+                  Expanded(
+                    child: Image(
+                      image: image,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  if (imageLocation == BulletsImageLocation.left)
+                    Expanded(
+                      child: Bullets(
+                        bullets: bullets,
+                        numVisibleBullets: bulletByBullet ? index : null,
+                      ),
+                    ),
+                ],
+              );
+            }
+
             return ContentLayout(
               title: title == null ? null : Text(title),
               subtitle: subtitle == null ? null : Text(subtitle),
               background: backgroundBuilder?.call(context),
-              content: Bullets(
-                bullets: bullets,
-                numVisibleBullets: bulletByBullet ? index : null,
-              ),
+              content: content,
             );
           },
           subSlideCount: bulletByBullet ? bullets.length + 1 : 1,
@@ -42,20 +84,53 @@ class BulletsSlide extends Slide {
     TextSpan? subtitle,
     required List<TextSpan> bullets,
     bool bulletByBullet = false,
+    BulletsImageLocation imageLocation = BulletsImageLocation.right,
+    AssetImage? image,
     WidgetBuilder? backgroundBuilder,
     String? notes,
     SlickTransition? transition,
     final SlideThemeData? theme,
   }) : super.withSubSlides(
           builder: (context, index) {
+            Widget content;
+            if (image == null) {
+              content = Bullets.rich(
+                bullets: bullets,
+                numVisibleBullets: bulletByBullet ? index : null,
+              );
+            } else {
+              content = Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (imageLocation == BulletsImageLocation.right)
+                    Expanded(
+                      child: Bullets.rich(
+                        bullets: bullets,
+                        numVisibleBullets: bulletByBullet ? index : null,
+                      ),
+                    ),
+                  Expanded(
+                    child: Image(
+                      image: image,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  if (imageLocation == BulletsImageLocation.left)
+                    Expanded(
+                      child: Bullets.rich(
+                        bullets: bullets,
+                        numVisibleBullets: bulletByBullet ? index : null,
+                      ),
+                    ),
+                ],
+              );
+            }
+
             return ContentLayout(
               title: title == null ? null : Text.rich(title),
               subtitle: subtitle == null ? null : Text.rich(subtitle),
               background: backgroundBuilder?.call(context),
-              content: Bullets.rich(
-                bullets: bullets,
-                numVisibleBullets: bulletByBullet ? index : null,
-              ),
+              content: content,
             );
           },
           subSlideCount: bulletByBullet ? bullets.length + 1 : 1,

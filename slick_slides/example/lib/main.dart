@@ -96,6 +96,15 @@ class MyHomePage extends StatelessWidget {
           ],
           transition: _defaultTransition,
         ),
+        BulletsSlide(
+          title: 'Bullets with images',
+          image: const AssetImage('assets/serverpod-avatars.webp'),
+          bullets: [
+            'Add images to you presentation with a single line of code.',
+            'Bullet point slides can have images too.',
+          ],
+          transition: _defaultTransition,
+        ),
         PersonSlide(
           title: 'Rockstar Flutter Developer',
           name: 'Philippa Flutterista',
