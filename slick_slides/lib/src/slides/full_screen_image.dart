@@ -40,7 +40,8 @@ class FullScreenImageSlide extends Slide {
   /// This constructor uses [TextSpan]s instead of [String]s for the title and
   /// subtitle to allow for rich text.
   FullScreenImageSlide.rich({
-    required TextSpan title,
+    required ImageProvider image,
+    TextSpan? title,
     TextSpan? subtitle,
     Alignment alignment = Alignment.center,
     WidgetBuilder? backgroundBuilder,
@@ -50,10 +51,19 @@ class FullScreenImageSlide extends Slide {
   }) : super(
           builder: (context) {
             return TitleLayout(
-              title: Text.rich(title),
+              title: title == null ? null : Text.rich(title),
               subtitle: subtitle == null ? null : Text.rich(subtitle),
               alignment: alignment,
-              background: backgroundBuilder?.call(context),
+              background: Image(
+                image: image,
+                fit: BoxFit.cover,
+              ),
+            );
+          },
+          onPrecache: (context) {
+            precacheImage(
+              image,
+              context,
             );
           },
           notes: notes,
