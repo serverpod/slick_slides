@@ -30,7 +30,9 @@ class PersonLayout extends StatelessWidget {
 
     return Stack(
       children: [
-        background ?? theme.backgroundBuilder(context),
+        Positioned.fill(
+          child: background ?? theme.backgroundBuilder(context),
+        ),
         Padding(
           padding: theme.borderPadding,
           child: Center(
