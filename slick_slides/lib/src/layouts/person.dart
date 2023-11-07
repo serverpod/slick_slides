@@ -29,6 +29,7 @@ class PersonLayout extends StatelessWidget {
     var theme = SlideTheme.of(context)!;
 
     return Stack(
+      fit: StackFit.expand,
       children: [
         Positioned.fill(
           child: background ?? theme.backgroundBuilder(context),
