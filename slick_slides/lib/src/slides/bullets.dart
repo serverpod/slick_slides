@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
@@ -26,7 +27,9 @@ class BulletsSlide extends Slide {
     WidgetBuilder? backgroundBuilder,
     String? notes,
     SlickTransition? transition,
-    final SlideThemeData? theme,
+    SlideThemeData? theme,
+    Duration? autoplayDuration,
+    Source? audioSource,
   }) : super.withSubSlides(
           builder: (context, index) {
             Widget content;
@@ -76,6 +79,8 @@ class BulletsSlide extends Slide {
           notes: notes,
           transition: transition,
           theme: theme,
+          autoplayDuration: autoplayDuration,
+          audioSource: audioSource,
         );
 
   /// Creates a slide that displays a list of bullet points based on [TextSpan]s.
@@ -91,7 +96,9 @@ class BulletsSlide extends Slide {
     WidgetBuilder? backgroundBuilder,
     String? notes,
     SlickTransition? transition,
-    final SlideThemeData? theme,
+    SlideThemeData? theme,
+    Duration? autoplayDuration,
+    Source? audioSource,
   }) : super.withSubSlides(
           builder: (context, index) {
             Widget content;
@@ -141,5 +148,7 @@ class BulletsSlide extends Slide {
           notes: notes,
           transition: transition,
           theme: theme,
+          autoplayDuration: autoplayDuration,
+          audioSource: audioSource,
         );
 }

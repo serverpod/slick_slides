@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
@@ -12,7 +13,9 @@ class TitleSlide extends Slide {
     WidgetBuilder? backgroundBuilder,
     String? notes,
     SlickTransition? transition,
-    final SlideThemeData? theme,
+    SlideThemeData? theme,
+    Source? audioSource,
+    Duration? autoplayDuration,
   }) : super(
           builder: (context) {
             return TitleLayout(
@@ -25,6 +28,8 @@ class TitleSlide extends Slide {
           notes: notes,
           transition: transition,
           theme: theme,
+          audioSource: audioSource,
+          autoplayDuration: autoplayDuration,
         );
 
   /// Creates a slide that displays a title and subtitle centered on the slide.
@@ -37,7 +42,9 @@ class TitleSlide extends Slide {
     WidgetBuilder? backgroundBuilder,
     String? notes,
     SlickTransition? transition,
-    final SlideThemeData? theme,
+    SlideThemeData? theme,
+    Source? audioSource,
+    Duration? autoplayDuration,
   }) : super(
           builder: (context) {
             return TitleLayout(
@@ -50,5 +57,7 @@ class TitleSlide extends Slide {
           notes: notes,
           transition: transition,
           theme: theme,
+          audioSource: audioSource,
+          autoplayDuration: autoplayDuration,
         );
 }

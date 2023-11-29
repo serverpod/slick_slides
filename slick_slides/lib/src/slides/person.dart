@@ -15,6 +15,7 @@ class PersonSlide extends Slide {
     WidgetBuilder? backgroundBuilder,
     SlickTransition? transition,
     final SlideThemeData? theme,
+    Duration? autoplayDuration,
   }) : super(
           builder: (context) {
             return PersonLayout(
@@ -26,8 +27,8 @@ class PersonSlide extends Slide {
               ),
             );
           },
-          onPrecache: (context) {
-            precacheImage(
+          onPrecache: (context) async {
+            await precacheImage(
               image,
               context,
             );
@@ -35,6 +36,7 @@ class PersonSlide extends Slide {
           notes: notes,
           transition: transition,
           theme: theme,
+          autoplayDuration: autoplayDuration,
         );
 
   /// Creates a slide that displays information about a person. It can have a
@@ -48,6 +50,7 @@ class PersonSlide extends Slide {
     WidgetBuilder? backgroundBuilder,
     SlickTransition? transition,
     final SlideThemeData? theme,
+    Duration? autoplayDuration,
   }) : super(
           builder: (context) {
             return PersonLayout(
@@ -59,8 +62,8 @@ class PersonSlide extends Slide {
               ),
             );
           },
-          onPrecache: (context) {
-            precacheImage(
+          onPrecache: (context) async {
+            await precacheImage(
               image,
               context,
             );
@@ -68,5 +71,6 @@ class PersonSlide extends Slide {
           notes: notes,
           transition: transition,
           theme: theme,
+          autoplayDuration: autoplayDuration,
         );
 }

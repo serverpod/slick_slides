@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
@@ -26,10 +27,13 @@ class AnimatedCodeSlide extends Slide {
     String? title,
     String? subtitle,
     required List<FormattedCode> formattedCode,
+    String language = 'dart',
     WidgetBuilder? backgroundBuilder,
     String? notes,
     SlickTransition? transition,
-    final SlideThemeData? theme,
+    SlideThemeData? theme,
+    Duration? autoplayDuration,
+    Source? audioSource,
   }) : super.withSubSlides(
           builder: (context, index) {
             var highlightedLines = formattedCode[index].highlightedLines;
@@ -39,12 +43,14 @@ class AnimatedCodeSlide extends Slide {
             if (index == 0) {
               content = ColoredCode(
                 code: code,
+                language: language,
                 highlightedLines: highlightedLines,
               );
             } else {
               content = ColoredCode(
                 animateFromCode: formattedCode[index - 1].code,
                 code: code,
+                language: language,
                 highlightedLines: highlightedLines,
                 animateHighlightedLines: true,
               );
@@ -61,5 +67,7 @@ class AnimatedCodeSlide extends Slide {
           notes: notes,
           transition: transition,
           theme: theme,
+          autoplayDuration: autoplayDuration,
+          audioSource: audioSource,
         );
 }

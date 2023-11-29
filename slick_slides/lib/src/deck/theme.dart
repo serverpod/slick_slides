@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+const _defaultAudioPaddingDuration = Duration(seconds: 1);
+
 /// The theme used to style a [Slide]. A default theme is provided by the
 /// [SlideDeck], but can be overridden by providing a custom [SlideTheme] to a
 /// specific [Slide].
@@ -28,6 +30,7 @@ class SlideThemeData {
     ],
     this.textTheme = const SlideTextThemeData.dark(),
     WidgetBuilder? backgroundBuilder,
+    this.audioPaddingDuration = _defaultAudioPaddingDuration,
   }) : _backgroundBuilder = backgroundBuilder;
 
   /// Creates a default light theme.
@@ -52,6 +55,7 @@ class SlideThemeData {
     ],
     this.textTheme = const SlideTextThemeData.light(),
     WidgetBuilder? backgroundBuilder,
+    this.audioPaddingDuration = _defaultAudioPaddingDuration,
   }) : _backgroundBuilder = backgroundBuilder;
 
   /// Creates an alternate dark theme, without the title gradient. This is
@@ -89,6 +93,7 @@ class SlideThemeData {
       ),
     ),
     WidgetBuilder? backgroundBuilder,
+    this.audioPaddingDuration = _defaultAudioPaddingDuration,
   }) : _backgroundBuilder = backgroundBuilder;
 
   /// The brightness of the theme.
@@ -143,6 +148,9 @@ class SlideThemeData {
               );
     }
   }
+
+  /// The duration of the audio padding at the end of a slide.
+  final Duration audioPaddingDuration;
 }
 
 /// The text theme used to style text on a slide.

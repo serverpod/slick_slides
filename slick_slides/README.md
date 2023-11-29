@@ -11,7 +11,7 @@ Before using Slick Slides, you need to initialize it. This loads code formaters 
 
 ```dart
 WidgetsFlutterBinding.ensureInitialized();
-await SlickSlides().initialize();
+await SlickSlides.initialize();
 ```
 
 Now, you can add the `SlideDeck` widget anywhere in your widget tree, but for the normal use case, you use it as the home of your `MaterialApp`. The `SlideDeck` maintains its own navigator and theme for the slides.

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -23,7 +24,7 @@ class SlickSlides {
   /// Initializes the `slick_slides` package, by loading required resources.
   /// Typically called in the `main()` function of the application, after
   /// `WidgetsFlutterBinding.ensureInitialized()` has been called.
-  Future<void> initialize() async {
+  static Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     await Highlighter.initialize(['dart', 'yaml']);
@@ -57,7 +58,10 @@ class Slide {
     this.transition,
     this.theme,
     this.onPrecache,
+    this.onEnter,
+    this.onExit,
     this.autoplayDuration,
+    this.audioSource,
   })  : _builder = builder,
         _subSlideBuilder = null,
         subSlideCount = 1,
@@ -74,7 +78,10 @@ class Slide {
     this.transition,
     this.theme,
     this.onPrecache,
+    this.onEnter,
+    this.onExit,
     this.autoplayDuration,
+    this.audioSource,
   })  : _subSlideBuilder = builder,
         _builder = null,
         hasSubSlides = true;
@@ -94,7 +101,13 @@ class Slide {
 
   /// Called when the slide is about to be shown, and can be used to load
   /// resources that are needed for the slide.
-  final void Function(BuildContext context)? onPrecache;
+  final Future<void> Function(BuildContext context)? onPrecache;
+
+  /// Called when the slide is shown, and can be used to start animations.
+  final VoidCallback? onEnter;
+
+  /// Called when the slide is hidden, and can be used to stop animations.
+  final VoidCallback? onExit;
 
   /// The number of sub slides in the slide. Will always be 1 if the slide
   /// doesn't have sub slides.
@@ -107,6 +120,11 @@ class Slide {
   /// If null, the [SlideDeck] will fallback to use the
   /// [SlideDeck.autoplayDuration].
   final Duration? autoplayDuration;
+
+  /// The audio to play when the slide is shown. If in autoplay mode, the
+  /// audio's duration will be used to determine how long to wait before
+  /// advancing to the next slide unless [autoplayDuration] is specified.
+  final Source? audioSource;
 }
 
 /// A deck of slides. It takes a list of [Slide]s, and builds the content of the
@@ -216,6 +234,11 @@ class _SlideArguments {
 
 /// The state of a [SlideDeck].
 class SlideDeckState extends State<SlideDeck> {
+  var _loading = true;
+
+  /// Returns true if the deck is currently loading.
+  bool get loading => _loading;
+
   _SlideIndex _index = const _SlideIndex(0, 0);
 
   final _navigatorKey = GlobalKey<NavigatorState>();
@@ -228,18 +251,77 @@ class SlideDeckState extends State<SlideDeck> {
 
   final _heroController = MaterialApp.createMaterialHeroController();
 
+  final _audioPlayers = <AudioPlayer?>[];
+  final _audioDurations = <Duration?>[];
+
   @override
   void initState() {
     super.initState();
     _focusNode.requestFocus();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _precacheSlide(1);
-    });
+    _load();
 
     if (widget.autoplay) {
       _startAutoplay();
     }
+  }
+
+  void _load() async {
+    // Setup audio players.
+    await _rebuildAudioPlayers();
+
+    await _precacheSlide(0);
+    await _precacheSlide(1);
+
+    setState(() {
+      _loading = false;
+    });
+
+    widget.slides[0].onEnter?.call();
+  }
+
+  bool get _hasAudio => widget.slides.any((slide) => slide.audioSource != null);
+
+  Future<void> _rebuildAudioPlayers() async {
+    // Dispose any old audio players.
+    for (var player in _audioPlayers) {
+      if (player != null) {
+        await player.dispose();
+      }
+    }
+
+    // Setup new audio players.
+    _audioPlayers.clear();
+
+    for (var slide in widget.slides) {
+      if (slide.audioSource != null) {
+        var audioPlayer = AudioPlayer();
+        _audioPlayers.add(audioPlayer);
+      } else {
+        _audioPlayers.add(null);
+      }
+    }
+
+    if (!_hasAudio) {
+      return;
+    }
+
+    _audioDurations.clear();
+    for (var player in _audioPlayers) {
+      if (player != null) {
+        await player.setSource(
+          widget.slides[_audioDurations.length].audioSource!,
+        );
+        var duration = await player.getDuration();
+        _audioDurations.add(duration);
+
+        await player.release();
+      } else {
+        _audioDurations.add(null);
+      }
+    }
+
+    assert(_audioDurations.length == widget.slides.length);
   }
 
   @override
@@ -255,18 +337,75 @@ class SlideDeckState extends State<SlideDeck> {
     }
   }
 
-  void _precacheSlide(int index) {
+  Future<void> _precacheSlide(int index) async {
     if (index >= widget.slides.length || index < 0) {
       return;
     }
     var slide = widget.slides[index];
-    slide.onPrecache?.call(context);
+    await slide.onPrecache?.call(context);
+
+    await _precacheAudio(index);
+  }
+
+  Future<void> _precacheAudio(int index) async {
+    if (index >= widget.slides.length || index < 0) {
+      return;
+    }
+    var slide = widget.slides[index];
+    if (slide.audioSource != null) {
+      var audioPlayer = _audioPlayers[index];
+      if (audioPlayer != null) {
+        await audioPlayer.setSource(slide.audioSource!);
+      }
+    }
+  }
+
+  void _playAudio(int index) {
+    if (index >= widget.slides.length || index < 0) {
+      return;
+    }
+    var slide = widget.slides[index];
+    if (slide.audioSource != null) {
+      var audioPlayer = _audioPlayers[index];
+      if (audioPlayer != null) {
+        audioPlayer.play(slide.audioSource!);
+      }
+    }
+  }
+
+  void _stopAudio(int index) {
+    if (index >= widget.slides.length || index < 0) {
+      return;
+    }
+    var slide = widget.slides[index];
+    if (slide.audioSource != null) {
+      var audioPlayer = _audioPlayers[index];
+      if (audioPlayer != null) {
+        audioPlayer.stop();
+        audioPlayer.release();
+      }
+    }
+  }
+
+  Duration? get _currentSlideAudioDuration {
+    var currentSlide = widget.slides[_index.index];
+    var audioDuration =
+        currentSlide.audioSource != null ? _audioDurations[_index.index] : null;
+
+    var theme = currentSlide.theme ?? widget.theme;
+
+    if (audioDuration != null) {
+      return audioDuration + theme.audioPaddingDuration;
+    }
+
+    return null;
   }
 
   Duration get _currentSubSlideDuration {
     var currentSlide = widget.slides[_index.index];
-    var slideDuration =
-        currentSlide.autoplayDuration ?? widget.autoplayDuration;
+    var slideDuration = currentSlide.autoplayDuration ??
+        _currentSlideAudioDuration ??
+        widget.autoplayDuration;
     var numSubSlides = currentSlide.subSlideCount;
     return slideDuration ~/ numSubSlides;
   }
@@ -295,6 +434,8 @@ class SlideDeckState extends State<SlideDeck> {
   void reassemble() {
     super.reassemble();
 
+    _rebuildAudioPlayers();
+
     SchedulerBinding.instance.addPostFrameCallback((timeStamp) {
       _navigatorKey.currentState?.pushReplacement(
         _generateRoute(RouteSettings(name: '$_index')),
@@ -308,6 +449,16 @@ class SlideDeckState extends State<SlideDeck> {
       _precacheSlide(newIndex.index - 1);
       _precacheSlide(newIndex.index + 1);
 
+      // Handle audio.
+      if (_index.index != newIndex.index) {
+        _stopAudio(_index.index);
+        _playAudio(newIndex.index);
+      }
+
+      widget.slides[_index.index].onExit?.call();
+      widget.slides[newIndex.index].onEnter?.call();
+
+      // Move to next slide.
       setState(() {
         _index = newIndex;
         _navigatorKey.currentState?.pushReplacementNamed(
@@ -315,7 +466,6 @@ class SlideDeckState extends State<SlideDeck> {
           arguments: arguments,
         );
       });
-      _index = newIndex;
     }
   }
 
@@ -372,6 +522,10 @@ class SlideDeckState extends State<SlideDeck> {
   Widget build(BuildContext context) {
     if (_index.index >= widget.slides.length) {
       _index = _SlideIndex(widget.slides.length - 1, 1);
+    }
+
+    if (_loading) {
+      return const SizedBox();
     }
 
     return Focus(

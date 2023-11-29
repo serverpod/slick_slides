@@ -13,6 +13,7 @@ class FullScreenImageSlide extends Slide {
     String? notes,
     SlickTransition? transition,
     final SlideThemeData? theme,
+    Duration? autoplayDuration,
   }) : super(
           builder: (context) {
             return TitleLayout(
@@ -25,8 +26,8 @@ class FullScreenImageSlide extends Slide {
               ),
             );
           },
-          onPrecache: (context) {
-            precacheImage(
+          onPrecache: (context) async {
+            await precacheImage(
               image,
               context,
             );
@@ -34,6 +35,7 @@ class FullScreenImageSlide extends Slide {
           notes: notes,
           transition: transition,
           theme: theme,
+          autoplayDuration: autoplayDuration,
         );
 
   /// Creates a slide that displays a title and subtitle centered on the slide.
@@ -48,6 +50,7 @@ class FullScreenImageSlide extends Slide {
     String? notes,
     SlickTransition? transition,
     final SlideThemeData? theme,
+    Duration? autoplayDuration,
   }) : super(
           builder: (context) {
             return TitleLayout(
@@ -60,8 +63,8 @@ class FullScreenImageSlide extends Slide {
               ),
             );
           },
-          onPrecache: (context) {
-            precacheImage(
+          onPrecache: (context) async {
+            await precacheImage(
               image,
               context,
             );
@@ -69,5 +72,6 @@ class FullScreenImageSlide extends Slide {
           notes: notes,
           transition: transition,
           theme: theme,
+          autoplayDuration: autoplayDuration,
         );
 }
