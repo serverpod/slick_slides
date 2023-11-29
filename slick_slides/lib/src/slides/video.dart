@@ -13,13 +13,13 @@ class VideoSlide extends Slide {
   /// Creates a slide that displays a video, filling the slide.
   VideoSlide({
     required this.videoPlayerController,
+    bool loop = false,
     Duration playAfterDuration = Duration.zero,
     String? notes,
     SlickTransition? transition,
     final SlideThemeData? theme,
     Duration? autoplayDuration,
     Source? audioSource,
-    bool loop = false,
   }) : super(
           builder: (context) {
             return VideoLayout(

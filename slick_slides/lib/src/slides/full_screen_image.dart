@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
@@ -14,6 +15,7 @@ class FullScreenImageSlide extends Slide {
     SlickTransition? transition,
     final SlideThemeData? theme,
     Duration? autoplayDuration,
+    Source? audioSource,
   }) : super(
           builder: (context) {
             return TitleLayout(
@@ -36,6 +38,7 @@ class FullScreenImageSlide extends Slide {
           transition: transition,
           theme: theme,
           autoplayDuration: autoplayDuration,
+          audioSource: audioSource,
         );
 
   /// Creates a slide that displays a title and subtitle centered on the slide.
@@ -51,6 +54,7 @@ class FullScreenImageSlide extends Slide {
     SlickTransition? transition,
     final SlideThemeData? theme,
     Duration? autoplayDuration,
+    Source? audioSource,
   }) : super(
           builder: (context) {
             return TitleLayout(
@@ -73,5 +77,6 @@ class FullScreenImageSlide extends Slide {
           transition: transition,
           theme: theme,
           autoplayDuration: autoplayDuration,
+          audioSource: audioSource,
         );
 }

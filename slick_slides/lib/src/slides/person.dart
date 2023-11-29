@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:slick_slides/slick_slides.dart';
@@ -16,6 +17,7 @@ class PersonSlide extends Slide {
     SlickTransition? transition,
     final SlideThemeData? theme,
     Duration? autoplayDuration,
+    Source? audioSource,
   }) : super(
           builder: (context) {
             return PersonLayout(
@@ -37,6 +39,7 @@ class PersonSlide extends Slide {
           transition: transition,
           theme: theme,
           autoplayDuration: autoplayDuration,
+          audioSource: audioSource,
         );
 
   /// Creates a slide that displays information about a person. It can have a
@@ -51,6 +54,7 @@ class PersonSlide extends Slide {
     SlickTransition? transition,
     final SlideThemeData? theme,
     Duration? autoplayDuration,
+    Source? audioSource,
   }) : super(
           builder: (context) {
             return PersonLayout(
@@ -72,5 +76,6 @@ class PersonSlide extends Slide {
           transition: transition,
           theme: theme,
           autoplayDuration: autoplayDuration,
+          audioSource: audioSource,
         );
 }
