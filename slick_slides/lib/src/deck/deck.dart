@@ -27,7 +27,7 @@ class SlickSlides {
   static Future<void> initialize() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    await Highlighter.initialize(['dart', 'yaml']);
+    await Highlighter.initialize(['dart', 'yaml', 'serverpod_protocol']);
     var theme = await HighlighterTheme.loadDarkTheme();
 
     highlighters['dart'] = Highlighter(
@@ -37,6 +37,11 @@ class SlickSlides {
 
     highlighters['yaml'] = Highlighter(
       language: 'yaml',
+      theme: theme,
+    );
+
+    highlighters['serverpod_protocol'] = Highlighter(
+      language: 'serverpod_protocol',
       theme: theme,
     );
   }
