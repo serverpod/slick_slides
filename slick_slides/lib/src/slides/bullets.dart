@@ -75,6 +75,14 @@ class BulletsSlide extends Slide {
               content: content,
             );
           },
+          onPrecache: (context) async {
+            if (image != null) {
+              await precacheImage(
+                image,
+                context,
+              );
+            }
+          },
           subSlideCount: bulletByBullet ? bullets.length + 1 : 1,
           notes: notes,
           transition: transition,
@@ -143,6 +151,14 @@ class BulletsSlide extends Slide {
               background: backgroundBuilder?.call(context),
               content: content,
             );
+          },
+          onPrecache: (context) async {
+            if (image != null) {
+              await precacheImage(
+                image,
+                context,
+              );
+            }
           },
           subSlideCount: bulletByBullet ? bullets.length + 1 : 1,
           notes: notes,
