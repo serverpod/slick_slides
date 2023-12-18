@@ -7,6 +7,30 @@ Use this package to create slick presentations for your tech talk and presentati
 Slick Slides is created and maintained by the [Serverpod](https://serverpod.dev) team. Serverpod is a server written in Dart for the Flutter community, check it out if you haven't.
 
 ## Getting started
+It's quick to setup Slick Slides. Just add the `slick_slides` package to your `pubspec.yaml` file, then follow the guide below.
+
+### Include fonts
+By default, Slick Slides uses _Inter_ and _Jetbrains Mono_ to display text and code. You will need to add them to your pubspec to make them accessible to the Slick Slides package. This is an example of what your `flutter` section in the `pubspec.yaml` file can look like with the fonts included. The fonts will be loaded to the package, so there is nothing more you need to do other than add the font references to your pubspec file.
+
+```yaml
+flutter:
+  uses-material-design: true
+
+  # Include fonts from slick_slides package.
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: packages/slick_slides/fonts/inter.ttf
+    - family: JetbrainsMono
+      fonts:
+        - asset: packages/slick_slides/fonts/jetbrainsmono.ttf
+
+  # Include all assets from the assets directory.
+  assets:
+    - assets/
+```
+
+### Flutter code setup
 Before using Slick Slides, you need to initialize it. This loads code formaters and any other required resources. If you initialize Slick Slides before you call `runApp`, you will need to call `WidgetsFlutterBinding.ensureInitialized()` before you call the `initialize` method.
 
 ```dart
@@ -128,3 +152,12 @@ These are some sweet things you can do with Slick Slides:
 - Do hero animations (just add heroes as you would in any Flutter transition).
 - Create interactive slides with custom widgets.
 - Add custom themes. A default dark and light theme is provided, but you can easily create and customize your own.
+- Autoplaying decks.
+- Audio files associated with slides and played when a slide is shown.
+
+## Known issues
+Slick Slides works well, but there are a couple of known issues that we hope to fix in the future (conrtributions are very welcome):
+
+- The custom font for displaying highlighted code (by default Jetbrains Mono) doesn't work on Flutter web.
+- Hero animations gets 'stuck' if interrupted, e.g. by moving quickly to another slide when the animation is running.
+- Video slides does not fade out correctly when leaving a slide using a fade transition.
