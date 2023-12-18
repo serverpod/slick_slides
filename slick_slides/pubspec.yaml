@@ -1,6 +1,6 @@
 name: slick_slides
 description: Create a nice looking presentations in Flutter with animations and code. Intended for techical talks and videos.
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/serverpod/slick_slides
 
 environment:
