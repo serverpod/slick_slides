@@ -172,8 +172,9 @@ class _ColoredCodeState extends State<ColoredCode>
       animatedCode = widget.code;
     }
 
-    var highlightedText =
-        SlickSlides.highlighters[widget.language]!.highlight(animatedCode);
+    var highlightedText = SlickSlides.highlighters[widget.language]!.highlight(
+      animatedCode,
+    );
 
     var coloredCode = Text.rich(
       highlightedText,
@@ -181,7 +182,7 @@ class _ColoredCodeState extends State<ColoredCode>
 
     if (widget.highlightedLines.isEmpty) {
       return DefaultTextStyle(
-        style: theme.textTheme.code,
+        style: widget.textStyle ?? theme.textTheme.code,
         child: coloredCode,
       );
     }
