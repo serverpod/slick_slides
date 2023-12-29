@@ -535,11 +535,11 @@ class SlideDeckState extends State<SlideDeck> {
 
     return Focus(
       focusNode: _focusNode,
-      onKey: (node, event) {
-        if (event is RawKeyDownEvent &&
+      onKeyEvent: (node, event) {
+        if (event is KeyDownEvent &&
             event.logicalKey == LogicalKeyboardKey.arrowRight) {
           _onNext();
-        } else if (event is RawKeyDownEvent &&
+        } else if (event is KeyDownEvent &&
             event.logicalKey == LogicalKeyboardKey.arrowLeft) {
           _onPrevious();
         }
