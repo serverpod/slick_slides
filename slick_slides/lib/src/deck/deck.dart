@@ -147,6 +147,7 @@ class SlideDeck extends StatefulWidget {
     this.size = const Size(1920, 1080),
     this.autoplay = false,
     this.autoplayDuration = const Duration(seconds: 5),
+    this.presenterView = false,
     super.key,
   });
 
@@ -164,6 +165,9 @@ class SlideDeck extends StatefulWidget {
 
   /// The duration to wait before automatically advancing to the next slide.
   final Duration autoplayDuration;
+
+  /// Show the deck in presenter mode, with presenter notes.
+  final bool presenterView;
 
   @override
   State<SlideDeck> createState() => SlideDeckState();
@@ -533,6 +537,128 @@ class SlideDeckState extends State<SlideDeck> {
       return const SizedBox();
     }
 
+    var slide = AspectRatio(
+      aspectRatio: widget.size.aspectRatio,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          FittedBox(
+            fit: BoxFit.contain,
+            child: SizedBox(
+              width: widget.size.width,
+              height: widget.size.height,
+              child: SlideTheme(
+                data: widget.theme,
+                child: HeroControllerScope(
+                  controller: _heroController,
+                  child: Navigator(
+                    key: _navigatorKey,
+                    initialRoute: '${const _SlideIndex.first()}',
+                    onGenerateRoute: _generateRoute,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          if (!widget.autoplay && !widget.presenterView)
+            Positioned(
+              bottom: 16.0,
+              right: 16.0,
+              child: MouseRegion(
+                onEnter: (event) {
+                  setState(() {
+                    _mouseInsideControls = true;
+                  });
+                },
+                onExit: (event) {
+                  setState(() {
+                    _mouseInsideControls = false;
+                  });
+                },
+                child: DeckControls(
+                  visible: _mouseMovedRecently || _mouseInsideControls,
+                  onPrevious: _onPrevious,
+                  onNext: _onNext,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+
+    Widget content;
+    if (widget.presenterView) {
+      content = Container(
+        color: Colors.black,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  child: slide,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 400.0,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Slide ${_index.index + 1} / ${widget.slides.length}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .copyWith(
+                                  color: Colors.white,
+                                ),
+                          ),
+                        ),
+                        DeckControls(
+                          visible: true,
+                          onPrevious: _onPrevious,
+                          onNext: _onNext,
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Text(
+                          widget.slides[_index.index].notes ?? '',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                    color: Colors.white,
+                                  ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      content = Container(
+        color: Colors.black,
+        child: Center(
+          child: slide,
+        ),
+      );
+    }
+
     return Focus(
       focusNode: _focusNode,
       onKeyEvent: (node, event) {
@@ -548,59 +674,7 @@ class SlideDeckState extends State<SlideDeck> {
       child: MouseRegion(
         onEnter: (event) => _onMouseMoved(),
         onHover: (event) => _onMouseMoved(),
-        child: Container(
-          color: Colors.black,
-          child: Center(
-            child: AspectRatio(
-              aspectRatio: widget.size.aspectRatio,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  FittedBox(
-                    fit: BoxFit.contain,
-                    child: SizedBox(
-                      width: widget.size.width,
-                      height: widget.size.height,
-                      child: SlideTheme(
-                        data: widget.theme,
-                        child: HeroControllerScope(
-                          controller: _heroController,
-                          child: Navigator(
-                            key: _navigatorKey,
-                            initialRoute: '${const _SlideIndex.first()}',
-                            onGenerateRoute: _generateRoute,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (!widget.autoplay)
-                    Positioned(
-                      bottom: 16.0,
-                      right: 16.0,
-                      child: MouseRegion(
-                        onEnter: (event) {
-                          setState(() {
-                            _mouseInsideControls = true;
-                          });
-                        },
-                        onExit: (event) {
-                          setState(() {
-                            _mouseInsideControls = false;
-                          });
-                        },
-                        child: DeckControls(
-                          visible: _mouseMovedRecently || _mouseInsideControls,
-                          onPrevious: _onPrevious,
-                          onNext: _onNext,
-                        ),
-                      ),
-                    ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        child: content,
       ),
     );
   }
