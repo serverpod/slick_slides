@@ -7,6 +7,7 @@ class DeckControls extends StatefulWidget {
   const DeckControls({
     required this.onPrevious,
     required this.onNext,
+    required this.onTogglePresenterView,
     this.visible = true,
     super.key,
   });
@@ -16,6 +17,9 @@ class DeckControls extends StatefulWidget {
 
   /// Called when the next button is pressed.
   final VoidCallback onNext;
+
+  /// Called when the toggle presenter mode button is pressed.
+  final VoidCallback onTogglePresenterView;
 
   /// Whether the controls are visible.
   final bool visible;
@@ -77,6 +81,17 @@ class _DeckControlsState extends State<DeckControls>
         padding: const EdgeInsets.all(8),
         child: Row(
           children: [
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.all(4),
+              ),
+              onPressed: widget.onTogglePresenterView,
+              child: const Icon(
+                Icons.speaker_notes_outlined,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 8),
             OutlinedButton(
               style: OutlinedButton.styleFrom(
                 padding: const EdgeInsets.all(4),

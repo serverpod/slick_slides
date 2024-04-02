@@ -258,6 +258,8 @@ class SlideDeckState extends State<SlideDeck> {
   bool _mouseMovedRecently = false;
   bool _mouseInsideControls = false;
 
+  late bool _presenterView;
+
   final _heroController = MaterialApp.createMaterialHeroController();
 
   final _audioPlayers = <AudioPlayer?>[];
@@ -266,6 +268,8 @@ class SlideDeckState extends State<SlideDeck> {
   @override
   void initState() {
     super.initState();
+    _presenterView = widget.presenterView;
+
     _focusNode.requestFocus();
 
     _load();
@@ -505,6 +509,12 @@ class SlideDeckState extends State<SlideDeck> {
     );
   }
 
+  void _onTogglePresenterView() {
+    setState(() {
+      _presenterView = !_presenterView;
+    });
+  }
+
   void _onMouseMoved() {
     if (_controlsTimer != null) {
       _controlsTimer!.cancel();
@@ -560,7 +570,7 @@ class SlideDeckState extends State<SlideDeck> {
               ),
             ),
           ),
-          if (!widget.autoplay && !widget.presenterView)
+          if (!widget.autoplay && !_presenterView)
             Positioned(
               bottom: 16.0,
               right: 16.0,
@@ -579,6 +589,7 @@ class SlideDeckState extends State<SlideDeck> {
                   visible: _mouseMovedRecently || _mouseInsideControls,
                   onPrevious: _onPrevious,
                   onNext: _onNext,
+                  onTogglePresenterView: _onTogglePresenterView,
                 ),
               ),
             ),
@@ -587,7 +598,7 @@ class SlideDeckState extends State<SlideDeck> {
     );
 
     Widget content;
-    if (widget.presenterView) {
+    if (_presenterView) {
       content = Container(
         color: Colors.black,
         child: Row(
@@ -629,6 +640,7 @@ class SlideDeckState extends State<SlideDeck> {
                           visible: true,
                           onPrevious: _onPrevious,
                           onNext: _onNext,
+                          onTogglePresenterView: _onTogglePresenterView,
                         ),
                       ],
                     ),
