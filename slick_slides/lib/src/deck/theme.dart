@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 const _defaultAudioPaddingDuration = Duration(seconds: 1);
