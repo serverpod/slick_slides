@@ -148,6 +148,7 @@ class SlideDeck extends StatefulWidget {
     this.autoplay = false,
     this.autoplayDuration = const Duration(seconds: 5),
     this.presenterView = false,
+    this.controlsEnabled = true,
     super.key,
   });
 
@@ -168,6 +169,14 @@ class SlideDeck extends StatefulWidget {
 
   /// Show the deck in presenter mode, with presenter notes.
   final bool presenterView;
+
+  /// Whether to show navigation controls when presenting slides.
+  /// 
+  /// If true, controls will be shown when the mouse is moved or hovering over the controls area.
+  /// If false, no controls will be displayed in the normal slide view.
+  /// 
+  /// Note: Controls are always visible in presenter view regardless of this setting.
+  final bool controlsEnabled;
 
   @override
   State<SlideDeck> createState() => SlideDeckState();
@@ -570,7 +579,7 @@ class SlideDeckState extends State<SlideDeck> {
               ),
             ),
           ),
-          if (!widget.autoplay && !_presenterView)
+          if (!widget.autoplay && !_presenterView && widget.controlsEnabled)
             Positioned(
               bottom: 16.0,
               right: 16.0,
